@@ -8,6 +8,8 @@ import {
   Clock,
   CheckCircle,
   Calendar,
+  BarChart3,
+  Eye,Edit,Trash2
 } from "lucide-react";
 
 export default function TeacherContent() {
@@ -21,6 +23,7 @@ export default function TeacherContent() {
       dueDate: "2025-08-15",
       submissions: 12,
       totalStudents: 25,
+      description: "Build reusable React components.",
       status: "active",
     },
     {
@@ -30,6 +33,7 @@ export default function TeacherContent() {
       dueDate: "2025-08-22",
       submissions: 8,
       totalStudents: 25,
+      description: "Implement core JavaScript logic.",
       status: "active",
     },
   ]);
@@ -68,6 +72,13 @@ export default function TeacherContent() {
       color: "purple",
     },
   ];
+
+  const colorMap = {
+    blue: "from-blue-400 to-blue-500",
+    green: "from-green-400 to-green-500",
+    orange: "from-orange-400 to-orange-500",
+    purple: "from-purple-400 to-purple-500",
+  };
 
   const handleCreateAssignment = () => {
     if (
@@ -111,7 +122,7 @@ export default function TeacherContent() {
                 </h3>
               </div>
               <div
-                className={`w-12 h-12 bg-gradient-to-r from-${stat.color}-400 to-${stat.color}-500 rounded-xl flex items-center justify-center`}
+                className={`w-12 h-12 bg-gradient-to-r ${colorMap[stat.color]} rounded-xl flex items-center justify-center`}
               >
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
@@ -148,12 +159,12 @@ export default function TeacherContent() {
                       <h3 className="font-semibold text-gray-900 mb-1">
                         {assignment.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-2">{assignment.subject}</p>
+                      <p className="text-gray-600 text-sm mb-1">{assignment.subject}</p>
+                      <p className="text-gray-500 text-sm mb-2">{assignment.description}</p>
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-4 mr-1" />
-                          Due:{" "}
-                          {new Date(assignment.dueDate).toLocaleDateString()}
+                          Due: {new Date(assignment.dueDate).toLocaleDateString()}
                         </div>
                         <div className="flex items-center">
                           <Users className="w-4 h-4 mr-1" />
@@ -166,21 +177,166 @@ export default function TeacherContent() {
                             className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500"
                             style={{
                               width: `${
-                                (assignment.submissions / assignment.totalStudents) *
-                                100
+                                (assignment.submissions / assignment.totalStudents) * 100
                               }%`,
                             }}
                           ></div>
                         </div>
                       </div>
                     </div>
+                      <div className="flex items-center space-x-2 ml-4">
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <Eye className="w-4 h-4 text-gray-600" />
+                        </button>
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <Edit className="w-4 h-4 text-gray-600" />
+                        </button>
+                        <button className="p-2 hover:bg-red-50 rounded-lg transition-colors">
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* Right Sidebar */}
+        <div className="space-y-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl hover:from-blue-200 hover:to-purple-200 transition-all duration-300">
+                <BarChart3 className="w-5 h-5 text-blue-500" />
+                <span className="text-gray-700">View Analytics</span>
+              </button>
+              <button className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-green-100 to-blue-100 rounded-xl hover:from-green-200 hover:to-blue-200 transition-all duration-300">
+                <Users className="w-5 h-5 text-green-600" />
+                <span className="text-gray-700">Manage students</span>
+              </button>
+              <button className="w-full flex items-center space-x-3 p-3 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl hover:from-purple-200 hover:to-pink-200 transition-all duration-300">
+                <Calendar className="w-5 h-5 text-purple-600" />
+                <span className="text-gray-700">Schedule Class</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                <div>
+                  <p className="text-sm text-gray-700">John submitted React Assignment</p>
+                  <p className="text-xs text-gray-500">2 minutes ago</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                <div>
+                  <p className="text-sm text-gray-700">Sarah asked a question</p>
+                  <p className="text-xs text-gray-500">15 minutes ago</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                <div>
+                  <p className="text-sm text-gray-700">Database project due tomorrow</p>
+                  <p className="text-xs text-gray-500">1 hour ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Create Assignment Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Create New Assignment</h2>
+            </div>
+            <div className="p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Assignment Title
+                </label>
+                <input
+                  type="text"
+                  value={newAssignment.title}
+                  onChange={(e) => setnewAssignment({ ...newAssignment, title: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea
+                  value={newAssignment.description}
+                  onChange={(e) =>
+                    setnewAssignment({ ...newAssignment, description: e.target.value })
+                  }
+                  rows="4"
+                  className="w-full py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  placeholder="Assignment description..."
+                ></textarea>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                  <input
+                    type="text"
+                    value={newAssignment.subject}
+                    onChange={(e) =>
+                      setnewAssignment({ ...newAssignment, subject: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                    placeholder="Subject name..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+                  <input
+                    type="date"
+                    value={newAssignment.dueDate}
+                    onChange={(e) =>
+                      setnewAssignment({ ...newAssignment, dueDate: e.target.value })
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Points</label>
+                <input
+                  type="number"
+                  value={newAssignment.points}
+                  onChange={(e) =>
+                    setnewAssignment({ ...newAssignment, points: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                  placeholder="Total points"
+                />
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-200 flex justify-end space-x-4">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateAssignment}
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105"
+              >
+                Create Assignment
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,8 +6,8 @@ import TeacherContent from "./components/TeacherContent";
 import StudentContent from "./components/StudentContent";
 
 export default function Home() {
-  const user=true; // Change this to false if you want to see the home page
-  const teacher=true;// Change this to true if you want to see the teacher dashboard
+  const user=true; // Change this to false if you want to see the home page(hard coded)
+  const teacher=true;// Change this to true if you want to see the teacher dashboard(hard coded)
   return (
     
     <div className="bg-white-100 min-h-screen">
