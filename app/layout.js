@@ -1,5 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./context/ModalContext"
+import ModalProvider from "./context/ModalContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +25,9 @@ export default function RootLayout({ children }) {
       <body
         className={" bg-white-100"}
       >
+        <ModalProvider>
         {children}
+        </ModalProvider>
       </body>
     </html>
   );

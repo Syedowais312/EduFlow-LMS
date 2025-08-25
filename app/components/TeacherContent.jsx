@@ -106,7 +106,7 @@ export default function TeacherContent() {
   };
 
   return (
-    <div className="max-w-7xl mt-20 mx-auto px-6 py-8">
+    <div className="max-w-7xl mt-30 mx-auto px-6 py-8">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (

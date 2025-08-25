@@ -33,6 +33,7 @@ export default function StudentContent() {
   const [submissionFile, setSubmissionFile] = useState(null);
   const [submissionText, setSubmissionText] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
+  ;
   const [assignments, setAssignments] = useState([
     {
       id: 1,
