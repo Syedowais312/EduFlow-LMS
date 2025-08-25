@@ -1,3 +1,74 @@
+# Assignment App
+
+A modern web application built with Next.js 15, React 19, and TailwindCSS.
+
+## Features
+
+- Modern UI with Geist font family
+- Responsive design using TailwindCSS
+- Modal system with context API
+- Framer Motion animations
+- Custom icon integration with Lucide React
+
+## Prerequisites
+
+- Node.js 18 or higher
+- npm or yarn package manager
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+## Development
+
+Run the development server with turbopack:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
+
+## Available Scripts
+
+- `npm run dev` - Starts development server with turbopack
+- `npm run build` - Creates production build
+- `npm run start` - Runs production server
+- `npm run lint` - Runs ESLint for code linting
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) - React framework
+- [React](https://reactjs.org/) - UI library
+- [TailwindCSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [Lucide React](https://lucide.dev/) - Icon library
+
+## Project Structure
+
+```
+app/
+├── components/    # Reusable React components
+├── context/      # React Context providers
+├── services/     # API and business logic
+├── globals.css   # Global styles
+├── layout.js     # Root layout component
+└── page.js       # Home page component
+```
+
+## License
+
+This project is private and not licensed for public use.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
