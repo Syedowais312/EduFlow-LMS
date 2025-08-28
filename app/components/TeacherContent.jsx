@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Plus,
   BookOpen,
@@ -15,6 +15,31 @@ import {
 export default function TeacherContent() {
   const [activeTab, setactiveTab] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+const [user, setUser] = useState(null);
+const [loading, setLoading] = useState(true);
+//fetching user from localstorage to get the id and school
+useEffect(() => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  } catch (err) {
+    console.error("Invalid JSON in localStorage.user:", err);
+    localStorage.removeItem("user");
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
+//fetching all the assignments created by the teacher
+const [tasks, setTasks] = useState([]);
+useEffect(() => {
+    fetch("http://localhost:8080/fetchAssignment")
+      .then((res) => res.json())
+      .then((data) => setTasks(data))
+      .catch((err) => console.error("Error fetching tasks:", err));
+  }, []);
   const [assignments, setAssignments] = useState([
     {
       id: 1,
@@ -79,31 +104,64 @@ export default function TeacherContent() {
     orange: "from-orange-400 to-orange-500",
     purple: "from-purple-400 to-purple-500",
   };
+const handleCreateAssignment = async () => {
+   
 
-  const handleCreateAssignment = () => {
-    if (
-      newAssignment.title &&
-      newAssignment.subject &&
-      newAssignment.dueDate
-    ) {
-      const assignment = {
-        id: assignments.length + 1,
-        ...newAssignment,
-        submissions: 0,
-        totalStudents: 25,
-        status: "active",
-      };
-      setAssignments([...assignments, assignment]);
-      setnewAssignment({
-        title: "",
-        description: "",
-        subject: "",
-        dueDate: "",
-        points: "",
-      });
-      setShowCreateModal(false);
-    }
-  };
+
+  
+
+  if (
+    !newAssignment.title ||
+    !newAssignment.subject ||
+    !newAssignment.dueDate
+  ) {
+    alert("Please fill all required fields");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:8080/assignments", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+  title: newAssignment.title,
+  description: newAssignment.description,
+  subject: newAssignment.subject,
+  due_date: new Date(newAssignment.dueDate).toISOString(), // convert to ISO string
+  teacher_id: user.id,   
+  school: user.school,
+}),
+
+    });
+if (!res.ok) {
+  const errorText = await res.text(); // 👀 grab backend response
+  console.error("Backend error:", errorText);
+  throw new Error("Failed to create assignment");
+}
+    const data = await res.json();
+
+    
+    setAssignments((prev) => [...prev, data]);
+    setnewAssignment({
+      title: "",
+      description: "",
+      subject: "",
+      dueDate: "",
+      points: "",
+    });
+    setShowCreateModal(false);
+  } catch (error) {
+    console.error("Error creating assignment:", error);
+    alert("Error creating assignment");
+  }
+};
+if (loading) {
+  return <div className="p-6">Loading...</div>;
+}
 
   return (
     <div className="max-w-7xl mt-30 mx-auto px-6 py-8">

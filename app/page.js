@@ -39,7 +39,7 @@ export default function Home() {
   user.role === "teacher" ? (
     <TeacherContent />
   ) : (
-    <StudentContent />
+    <StudentContent user={user}/>
   )
 ) : (
   <StarterPage />

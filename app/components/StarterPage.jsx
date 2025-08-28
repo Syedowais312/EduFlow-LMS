@@ -63,7 +63,7 @@ function StarterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    schoolName: "",
+    school: "",
     grade: "",
     subject: "",
     experience: "",
@@ -123,7 +123,7 @@ const HandleLogin = async (e) => {
       
       const data = await res.json();
       
-      if (data.token) {
+      if (data.token ) {
         // Note: In a real app, avoid localStorage in artifacts
         // This is just for demonstration
         alert("Signup Successfully");
@@ -529,22 +529,36 @@ const HandleLogin = async (e) => {
 
                     {/* School Name */}
                     <div className="mb-6">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        School Name
-                      </label>
-                      <div className="relative">
-                        <School className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          name="schoolName"
-                          value={formData.schoolName}
-                          onChange={handleInputChange}
-                          className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
-                          placeholder="Your School Name"
-                          required
-                        />
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                           School Name
+                        </label>
+                        <div className="relative">
+                          <BookOpen className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <select
+                            name="school" // Changed to match the formData property
+                            value={formData.school}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
+                            required
+                          >
+                            <option value="" className="bg-slate-800">
+                              Select school
+                            </option>
+                            <option value="Dayananda sagar college" className="bg-slate-800">
+                             Dayananda sagar college
+                            </option>
+                            <option value="PES University" className="bg-slate-800">
+                              PES University
+                            </option>
+                            <option value="RV College" className="bg-slate-800">
+                              RV College
+                            </option>
+                            <option value="BMS College" className="bg-slate-800">
+                              BMS College
+                            </option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
 
                     {/* Student Fields */}
                     {selectedRole === "student" && (
@@ -581,66 +595,6 @@ const HandleLogin = async (e) => {
                       </div>
                     )}
 
-                    {/* Teacher Fields */}
-                    {selectedRole === "teacher" && (
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
-                            Subject
-                          </label>
-                          <div className="relative">
-                            <BookOpen className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <select
-                              name="subject"
-                              value={formData.subject}
-                              onChange={handleInputChange}
-                              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
-                              required
-                            >
-                              <option value="" className="bg-slate-800">
-                                Select Subject
-                              </option>
-                              <option value="math" className="bg-slate-800">
-                                Mathematics
-                              </option>
-                              <option value="science" className="bg-slate-800">
-                                Science
-                              </option>
-                              <option value="english" className="bg-slate-800">
-                                English
-                              </option>
-                              <option value="history" className="bg-slate-800">
-                                History
-                              </option>
-                              <option value="other" className="bg-slate-800">
-                                Other
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-2">
-                            Experience
-                          </label>
-                          <div className="relative">
-                            <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <select
-                              name="experience"
-                              value={formData.experience}
-                              onChange={handleInputChange}
-                              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:bg-white/20 transition-all duration-300"
-                              required
-                            >
-                              <option value="" className="bg-slate-800">Years</option>
-                              <option value="0-2" className="bg-slate-800">0-2 years</option>
-                              <option value="3-5" className="bg-slate-800">3-5 years</option>
-                              <option value="6-10" className="bg-slate-800">6-10 years</option>
-                              <option value="10+" className="bg-slate-800">10+ years</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    )}
 
                     {/* Submit Button */}
                     <button
