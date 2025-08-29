@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 export default function StudentContent() {
+  
   const [activeTab, setActiveTab] = useState("assignments");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -33,51 +34,41 @@ export default function StudentContent() {
   const [submissionFile, setSubmissionFile] = useState(null);
   const [submissionText, setSubmissionText] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
-  ;
-  const [assignments, setAssignments] = useState([
-    {
-      id: 1,
-      title: "React Components Assignment",
-      subject: "Web Development",
-      dueDate: "2025-08-15",
-      submittedDate: "2025-08-10",
-      description: "Build reusable React components using modern patterns and hooks.",
-      points: 100,
-      earnedPoints: 95,
-      status: "graded",
-      difficulty: "Medium",
-      instructor: "Prof. Johnson",
-      feedback: "Excellent work! Great component structure and clean code."
-    },
-    {
-      id: 2,
-      title: "JavaScript Functions Assignment",
-      subject: "Web Development",
-      dueDate: "2025-08-22",
-      submittedDate: null,
-      description: "Implement core JavaScript functions and algorithms.",
-      points: 100,
-      earnedPoints: null,
-      status: "not_submitted",
-      difficulty: "Hard",
-      instructor: "Prof. Johnson",
-      feedback: null
-    },
-    {
-      id: 3,
-      title: "CSS Grid Layout",
-      subject: "Web Development",
-      dueDate: "2025-08-03",
-      submittedDate: "2025-07-28",
-      description: "Create responsive layouts using CSS Grid.",
-      points: 80,
-      earnedPoints: null,
-      status: "pending",
-      difficulty: "Easy",
-      instructor: "Prof. Johnson",
-      feedback: null
-    },
-  ]);
+  
+  //fetching all the assignments created by the teacher
+  const [assignments, setAssignments] = useState([]);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // token survives refresh
+
+    fetch("http://localhost:8080/fetchAssignment", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { "Authorization": "Bearer " + token }) // attach token if exists
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch assignments");
+        return res.json();
+      })
+      .then(data => {
+        // Transform the data to match the UI structure with default values
+        const transformedData = data.map(assignment => ({
+          ...assignment,
+          dueDate: assignment.due_date,
+          status: "not_submitted", // Default status
+          difficulty: "Medium", // Default difficulty
+          instructor: "Teacher", // Default instructor name
+          points: 100, // Default points
+          submittedDate: null,
+          earnedPoints: null,
+          feedback: null
+        }));
+        setAssignments(transformedData);
+      })
+      .catch(err => console.error(err));
+  }, []); 
 
   // Calculate stats dynamically
   const totalAssignments = assignments.length;
@@ -176,6 +167,10 @@ export default function StudentContent() {
       default:
         return "bg-gray-100 text-gray-600";
     }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
   };
 
   const handleSubmit = (assignmentId) => {
@@ -335,13 +330,13 @@ export default function StudentContent() {
                             </span>
                           </div>
                           <p className="text-gray-600 text-sm mb-1">
-                            {assignment.subject} • {assignment.instructor}
+                            {assignment.subject} • {assignment.instructor} • {assignment.school}
                           </p>
                           <p className="text-gray-700 text-sm mb-3">{assignment.description}</p>
                           <div className="flex items-center space-x-6 text-sm text-gray-500">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
-                              Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                              Due: {formatDate(assignment.dueDate)}
                             </div>
                             <div className="flex items-center">
                               <Target className="w-4 h-4 mr-1" />
@@ -350,7 +345,7 @@ export default function StudentContent() {
                             {assignment.submittedDate && (
                               <div className="flex items-center">
                                 <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
-                                Submitted: {new Date(assignment.submittedDate).toLocaleDateString()}
+                                Submitted: {formatDate(assignment.submittedDate)}
                               </div>
                             )}
                           </div>
@@ -414,7 +409,7 @@ export default function StudentContent() {
                             <h4 className="font-semibold text-gray-900 text-lg">{assignment.title}</h4>
                             <p className="text-sm text-gray-600">{assignment.subject} • {assignment.instructor}</p>
                             <p className="text-xs text-gray-500">
-                              Submitted: {new Date(assignment.submittedDate).toLocaleDateString()}
+                              Submitted: {formatDate(assignment.submittedDate)}
                             </p>
                           </div>
                           <div className="text-right">
@@ -458,7 +453,7 @@ export default function StudentContent() {
                     <h4 className="font-medium text-gray-900 text-sm">{assignment.title}</h4>
                     <p className="text-xs text-gray-600 mb-1">{assignment.subject}</p>
                     <p className="text-xs text-orange-600 font-medium">
-                      Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                      Due: {formatDate(assignment.dueDate)}
                     </p>
                   </div>
                 ))

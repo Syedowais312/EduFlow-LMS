@@ -33,36 +33,26 @@ useEffect(() => {
 }, []);
 
 //fetching all the assignments created by the teacher
-const [tasks, setTasks] = useState([]);
-useEffect(() => {
-    fetch("http://localhost:8080/fetchAssignment")
-      .then((res) => res.json())
-      .then((data) => setTasks(data))
-      .catch((err) => console.error("Error fetching tasks:", err));
-  }, []);
-  const [assignments, setAssignments] = useState([
-    {
-      id: 1,
-      title: "React Components Assignment",
-      subject: "Web Development",
-      dueDate: "2025-08-15",
-      submissions: 12,
-      totalStudents: 25,
-      description: "Build reusable React components.",
-      status: "active",
-    },
-    {
-      id: 2,
-      title: "JS Functions Assignment",
-      subject: "Web Development",
-      dueDate: "2025-08-22",
-      submissions: 8,
-      totalStudents: 25,
-      description: "Implement core JavaScript logic.",
-      status: "active",
-    },
-  ]);
+ const [assignments, setAssignments] = useState([]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // token survives refresh
+
+    fetch("http://localhost:8080/fetchAssignment", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { "Authorization": "Bearer " + token }) // attach token if exists
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch assignments");
+        return res.json();
+      })
+      .then(data => setAssignments(data))
+      .catch(err => console.error(err));
+  }, []); 
+  
   const [newAssignment, setnewAssignment] = useState({
     title: "",
     description: "",
