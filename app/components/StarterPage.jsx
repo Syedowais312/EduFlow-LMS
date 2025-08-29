@@ -68,6 +68,16 @@ function StarterPage() {
     subject: "",
     experience: "",
   });
+  const parseJSON = async (res) => {
+  try {
+    // Check if body exists before parsing
+    const text = await res.text();
+    return text ? JSON.parse(text) : {};
+  } catch (err) {
+    console.error("JSON parse error:", err);
+    return {};
+  }
+};
 const HandleLogin = async (e) => {
   e.preventDefault();
 
@@ -81,13 +91,12 @@ const HandleLogin = async (e) => {
       }),
     });
 
-    const data = await res.json();
+    const data = await parseJSON(res);
 
     if (data.token) {
       alert("Login Successfully");
-       localStorage.setItem("token",data.token)
-        localStorage.setItem("user",JSON.stringify(data.user))
-       
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       setShowModal(false);
     } else {
       alert("Login failed");
@@ -97,6 +106,7 @@ const HandleLogin = async (e) => {
     alert("Network error occurred");
   }
 };
+
 
 
   const handleInputChange = (e) => {

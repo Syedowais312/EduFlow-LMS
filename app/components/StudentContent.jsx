@@ -41,7 +41,7 @@ export default function StudentContent() {
   useEffect(() => {
     const token = localStorage.getItem("token"); // token survives refresh
 
-    fetch("http://localhost:8080/fetchAssignment", {
+    fetch(process.env.NEXT_PUBLIC_FETCH_ASSIGNMENT, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

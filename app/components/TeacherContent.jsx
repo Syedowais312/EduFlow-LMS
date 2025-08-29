@@ -32,26 +32,31 @@ useEffect(() => {
   }
 }, []);
 
+
 //fetching all the assignments created by the teacher
  const [assignments, setAssignments] = useState([]);
+useEffect(() => {
+  const token = localStorage.getItem("token"); 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // token survives refresh
-
-    fetch("http://localhost:8080/fetchAssignment", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { "Authorization": "Bearer " + token }) // attach token if exists
-      }
+  fetch(process.env.NEXT_PUBLIC_FETCH_ASSIGNMENT, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { "Authorization": "Bearer " + token })
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch assignments");
+      return res.json();
     })
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch assignments");
-        return res.json();
-      })
-      .then(data => setAssignments(data))
-      .catch(err => console.error(err));
-  }, []); 
+    .then(data => {
+      setAssignments(Array.isArray(data) ? data : []);
+    })
+    .catch(err => {
+      console.error(err);
+      setAssignments([]); // fallback
+    });
+}, []);
   
   const [newAssignment, setnewAssignment] = useState({
     title: "",
@@ -111,7 +116,7 @@ const handleCreateAssignment = async () => {
 
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:8080/assignments", {
+    const res = await fetch(process.env.NEXT_PUBLIC_ASSIGNMENT_CREATE, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
