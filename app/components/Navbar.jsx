@@ -6,7 +6,7 @@ import { BookOpen, Search, Bell, Settings, User, LogOut } from 'lucide-react';
 import { useRouter } from "next/navigation";
 export default function Navbar() {
   const [isLogin, setisLogin] = useState(false);
-      const [user, setUser] = useState(null);
+      const [user, setUser] = useState(false);
     const router = useRouter();
      useEffect(() => {
       try {
