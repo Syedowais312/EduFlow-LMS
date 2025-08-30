@@ -387,7 +387,7 @@ export default function StudentContent() {
                           {assignment.status === "not_submitted" && (
                             <button 
                               onClick={() => handleSubmit(assignment.id)}
-                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg"
+                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg"
                             >
                               <Upload className="w-4 h-4" />
                               <span>Submit</span>
@@ -402,7 +402,7 @@ export default function StudentContent() {
                           {assignment.status === "not_submitted" && (
                             <button 
                               onClick={() => handleSubmit(assignment.id)}
-                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg"
+                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg"
                             >
                               <Upload className="w-4 h-4" />
                               <span>Submit</span>
@@ -603,7 +603,7 @@ export default function StudentContent() {
                       />
                       <label
                         htmlFor="file-upload"
-                        className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 cursor-pointer transition-all duration-300 hover:scale-105 shadow-lg"
+                        className="inline-block px-6 py-3 bg-gradient-to-r from-blue-700 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 cursor-pointer transition-all duration-300 hover:scale-105 shadow-lg"
                       >
                         Choose File
                       </label>
@@ -639,7 +639,7 @@ export default function StudentContent() {
               <button
                 onClick={handleFileSubmission}
                 disabled={!submissionFile && !submissionText.trim()}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit Assignment
               </button>
