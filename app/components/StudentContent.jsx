@@ -34,6 +34,16 @@ export default function StudentContent() {
   const [submissionFile, setSubmissionFile] = useState(null);
   const [submissionText, setSubmissionText] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isMobile,setIsMobile]=useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+
+    checkMobile(); // check on mount
+    window.addEventListener("resize", checkMobile); // check on resize
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   
   //fetching all the assignments created by the teacher
   const [assignments, setAssignments] = useState([]);
@@ -221,7 +231,8 @@ export default function StudentContent() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
         {stats.map((stat, index) => (
           <div
             key={index}
@@ -275,8 +286,8 @@ export default function StudentContent() {
                 </div>
                 
                 {activeTab === "assignments" && (
-                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-                    <div className="relative flex-1">
+                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+  <div className="relative flex-1 w-full">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                       <input
                         type="text"
@@ -286,6 +297,7 @@ export default function StudentContent() {
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
                       />
                     </div>
+                  
                     <select
                       value={filterStatus}
                       onChange={(e) => setFilterStatus(e.target.value)}
@@ -371,7 +383,7 @@ export default function StudentContent() {
                             </div>
                           )}
                         </div>
-                        <div className="flex items-center space-x-2 ml-4">
+                       {!isMobile&&( <div className="flex items-center space-x-2 ml-4">
                           {assignment.status === "not_submitted" && (
                             <button 
                               onClick={() => handleSubmit(assignment.id)}
@@ -384,9 +396,24 @@ export default function StudentContent() {
                           <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                             <Eye className="w-4 h-4 text-gray-600" />
                           </button>
-                        </div>
+                        </div>)}
                       </div>
+                      {isMobile&&(<div className="flex items-center space-x-2 ml-4">
+                          {assignment.status === "not_submitted" && (
+                            <button 
+                              onClick={() => handleSubmit(assignment.id)}
+                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg"
+                            >
+                              <Upload className="w-4 h-4" />
+                              <span>Submit</span>
+                            </button>
+                          )}
+                          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                            <Eye className="w-4 h-4 text-gray-600" />
+                          </button>
+                        </div>)}
                     </div>
+
                   ))
                 )}
               </div>
