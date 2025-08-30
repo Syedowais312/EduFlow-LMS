@@ -1,8 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "./context/ModalContext"
 import ModalProvider from "./context/ModalContext";
-
+import Navbar from "../app/components/Navbar"; // notice the client version
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,13 +19,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
-      <body
-        className={" bg-white-100"}
-      >
+      <body className="bg-white-100">
         <ModalProvider>
-        {children}
+          <Navbar />
+          {children}
         </ModalProvider>
       </body>
     </html>

@@ -193,7 +193,7 @@ if (loading) {
                 <h2 className="text-xl font-semibold text-gray-900">Assignments</h2>
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-500/25"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-500/25"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Create Assignment</span>

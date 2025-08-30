@@ -17,6 +17,7 @@ import {
   Zap
 } from "lucide-react";
 import { useState, useEffect, createContext, useContext } from "react";
+import { useRouter } from "next/navigation";
 
 // Mock Modal Context (since the original context is not available)
 const ModalContext = createContext();
@@ -46,6 +47,7 @@ const useModal = () => {
 };
 
 function StarterPage() {
+    const router = useRouter();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const { showModal, setShowModal } = useModal();
@@ -78,6 +80,7 @@ function StarterPage() {
     return {};
   }
 };
+// Update the HandleLogin function
 const HandleLogin = async (e) => {
   e.preventDefault();
 
@@ -98,6 +101,15 @@ const HandleLogin = async (e) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       setShowModal(false);
+      
+      // Redirect based on role
+      const userRole = data.user.role;
+      console.log(userRole);
+      if (userRole === "teacher") {
+        router.replace("/teacherpage");
+      } else if (userRole === "student") {
+        router.replace("/studentpage");
+      }
     } else {
       alert("Login failed");
     }
@@ -114,34 +126,37 @@ const HandleLogin = async (e) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Update the handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
 
     try {
-   
       const res = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({ ...formData, role: selectedRole }),
+        body: JSON.stringify({ ...formData, role: selectedRole }),
       });
       
       const data = await res.json();
       
-      if (data.token ) {
-        // Note: In a real app, avoid localStorage in artifacts
-        // This is just for demonstration
+      if (data.token) {
         alert("Signup Successfully");
-        localStorage.setItem("token",data.token)
-        localStorage.setItem("user",JSON.stringify(data.user))
-       
-        console.log("token:", data.token);
-       
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setShowModal(false);
+        
+        // Redirect based on role
+        const userRole = data.user.role;
+        if (userRole === "teacher") {
+          router.replace("/teacherpage");
+        } else if (userRole === "student") {
+          router.replace("/studentpage");
+        }
       } else {
         alert("Signup failed");
       }
@@ -196,6 +211,30 @@ const HandleLogin = async (e) => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Add this useEffect at the top of your StarterPage component
+useEffect(() => {
+  // Check if user is logged in
+  const userStr = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  
+  if (userStr && token) {
+    try {
+      const user = JSON.parse(userStr);
+      // Redirect based on role
+      if (user.user.role === "teacher") {
+        router.push("/TeacherPage");
+      } else {
+        router.push("/StudentPage");
+      }
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      // Clear invalid data
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+    }
+  }
+}, [router]); // Add router as dependency
 
   const features = [
     { icon: FileText, title: "Smart Assignments", desc: "Create and manage assignments with intelligent tracking" },
@@ -289,7 +328,7 @@ const HandleLogin = async (e) => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
                   onClick={handleGetStarted}
-                  className="px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-300 hover:scale-105"
+                  className="px-8 py-4 bg-gradient-to-r from-blue-700 to-blue-600 rounded-full font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 hover:scale-105"
                 >
                   Start Free Trial
                 </button>
@@ -352,7 +391,7 @@ const HandleLogin = async (e) => {
 
   <button 
     type="submit"
-    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl py-3 hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
+    className="w-full bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 text-white rounded-xl py-3 hover:from-blue-700 hover:to-blue-800 transition-all duration-300"
   >
     Login
   </button>

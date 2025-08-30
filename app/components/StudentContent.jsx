@@ -387,7 +387,7 @@ export default function StudentContent() {
                           {assignment.status === "not_submitted" && (
                             <button 
                               onClick={() => handleSubmit(assignment.id)}
-                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg"
+                              className="flex items-center space-x-2 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 rounded-full hover:from-blue-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg"
                             >
                               <Upload className="w-4 h-4" />
                               <span>Submit</span>

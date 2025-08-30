@@ -1,10 +1,30 @@
+"use client"
 import React, { useState,useEffect } from 'react';
 import Link from 'next/link';
 import { useModal } from '../context/ModalContext';
 import { BookOpen, Search, Bell, Settings, User, LogOut } from 'lucide-react';
-
-export default function Navbar({ user,role,handleLogout }) {
+import { useRouter } from "next/navigation";
+export default function Navbar() {
   const [isLogin, setisLogin] = useState(false);
+      const [user, setUser] = useState(null);
+    const router = useRouter();
+     useEffect(() => {
+      try {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+      } catch (err) {
+        console.error("Invalid JSON in localStorage.user:", err);
+        localStorage.removeItem("user");
+      }
+    }, []);
+      const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        router.push("/mainpage");
+         // reset state
+      };
     
   
   return (
@@ -13,19 +33,26 @@ export default function Navbar({ user,role,handleLogout }) {
       <div className="container mx-auto flex flex-wrap justify-between items-center p-4">
         {/* Logo and Title */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 rounded-xl flex items-center justify-center">
             <BookOpen className="w-6 h-6 text-white" />
           </div>
           {user ? (
             <div className="flex flex-col">
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-400 bg-clip-text text-transparent">
-              {role==="teacher"?"Teacher":"Student"}
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+              {user.role==="teacher"?"Teacher":"Student"}
+             
             </span>
-              <p className="text-sm text-grey-600">prof. {user.firstname}</p>
+             {user.role==="teacher"?(
+               <p className="text-sm text-grey-600">prof. {user.firstname}</p>
            
+             ):(
+               <p className="text-sm text-grey-600">ft. {user.firstname}</p>
+           
+             )}
+             
             </div>
           ) : (
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 bg-clip-text text-transparent">
               EduFlow
             </span>
           )}
@@ -53,10 +80,8 @@ export default function Navbar({ user,role,handleLogout }) {
               <Settings className="w-5 h-5 text-gray-600" />
             </button>
 
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <button className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25"
+           
+            <button className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25"
             onClick={handleLogout}>
               Logout
             </button>
@@ -64,7 +89,7 @@ export default function Navbar({ user,role,handleLogout }) {
         ) : (
           <div className="mt-4 md:mt-0 flex gap-3 flex-wrap">
            
-            <button className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25"
+            <button className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-700 via-blue-600 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25"
             onClick={() => setShowModal(true)}>
               Sign Up
             </button>
