@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 // Mock Modal Context (since the original context is not available)
 const ModalContext = createContext();
 
 const ModalProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
 
@@ -54,6 +56,7 @@ function StarterPage() {
   const { user, setUser } = useModal();
   const { isTeacher, setIsTeacher } = useModal();
   const [isLogin, setIsLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
 
   const [selectedRole, setSelectedRole] = useState("student");
   const [showPassword, setShowPassword] = useState(false);
@@ -83,6 +86,7 @@ function StarterPage() {
 // Update the HandleLogin function
 const HandleLogin = async (e) => {
   e.preventDefault();
+    setLoading(true);
 
   try {
     const res = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
@@ -117,6 +121,9 @@ const HandleLogin = async (e) => {
     console.error("Login error:", error);
     alert("Network error occurred");
   }
+  finally {
+    setLoading(false); 
+  }
 };
 
 
@@ -134,7 +141,7 @@ const HandleLogin = async (e) => {
       alert("Passwords don't match!");
       return;
     }
-
+  setLoading(true);
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
         method: "POST",
@@ -164,6 +171,9 @@ const HandleLogin = async (e) => {
       console.error("Signup error:", error);
       alert("Network error occurred");
     }
+    finally {
+    setLoading(false); // hide loading
+  }
    
     console.log("Signup Data:", formData);
     console.log("Selected Role:", selectedRole);
@@ -245,6 +255,16 @@ useEffect(() => {
 
   return (
     <>
+     {loading && (
+  <div className="fixed top-0 left-0 w-full h-1 bg-gray-700 overflow-hidden z-[60]">
+    <motion.div
+      className="h-1 bg-blue-500"
+      initial={{ width: 0 }}
+      animate={{ width: "90%" }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
+    />
+  </div>
+)}
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-blue-900 text-white overflow-hidden relative">
         {/* Hero Section */}
         <div className={`relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -340,8 +360,9 @@ useEffect(() => {
           </div>
         </div>
       </div>
+      
 
-      {showModal && (
+      {showModal &&!loading&& (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto p-6">
           <div className="flex items-center justify-center min-h-full">
             {isLogin ? (
